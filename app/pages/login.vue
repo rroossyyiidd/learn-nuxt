@@ -56,6 +56,42 @@
           </v-btn>
         </v-form>
 
+        <!-- OAuth Divider -->
+        <div class="d-flex align-center my-5">
+          <v-divider />
+          <span class="mx-3 text-body-2 text-medium-emphasis">or continue with</span>
+          <v-divider />
+        </div>
+
+        <!-- OAuth Buttons -->
+        <div class="d-flex flex-column ga-3">
+          <v-btn
+            block
+            size="large"
+            variant="outlined"
+            :loading="oauthLoading === 'github'"
+            :disabled="!!oauthLoading"
+            class="text-none font-weight-medium"
+            @click="loginWithOAuth('github')"
+          >
+            <v-icon icon="mdi-github" class="mr-2" />
+            Sign in with GitHub
+          </v-btn>
+
+          <v-btn
+            block
+            size="large"
+            variant="outlined"
+            :loading="oauthLoading === 'gitlab'"
+            :disabled="!!oauthLoading"
+            class="text-none font-weight-medium"
+            @click="loginWithOAuth('gitlab')"
+          >
+            <v-icon icon="mdi-gitlab" class="mr-2" />
+            Sign in with GitLab
+          </v-btn>
+        </div>
+
         <div class="text-center mt-4">
           <v-chip size="small" variant="tonal" color="info">
             <v-icon icon="mdi-information" start />
@@ -68,7 +104,7 @@
 </template>
 
 <script setup lang="ts">
-
+import type { Provider } from '@supabase/supabase-js'
 
 definePageMeta({
   layout: false,
@@ -89,6 +125,7 @@ const errors = reactive({
 const showPassword = ref(false)
 const loading = ref(false)
 const loginError = ref('')
+const oauthLoading = ref<string | null>(null)
 
 const handleLogin = async () => {
   // Reset errors
@@ -117,6 +154,30 @@ const handleLogin = async () => {
   }
   finally {
     loading.value = false
+  }
+}
+
+const loginWithOAuth = async (provider: Provider) => {
+  oauthLoading.value = provider
+  loginError.value = ''
+
+  try {
+    const supabase = useSupabase()
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: `${window.location.origin}/confirm`,
+      },
+    })
+
+    if (error) {
+      throw error
+    }
+  }
+  catch (err: unknown) {
+    const e = err as Error
+    loginError.value = e.message || `Failed to sign in with ${provider}`
+    oauthLoading.value = null
   }
 }
 </script>

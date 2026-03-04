@@ -23,6 +23,8 @@ export default defineNuxtConfig({
     tmdbToken: process.env.TMDB_TOKEN || '',
     public: {
       tmdbImageBase: 'https://image.tmdb.org/t/p',
+      supabaseUrl: process.env.SUPABASE_URL || '',
+      supabaseKey: process.env.SUPABASE_KEY || '',
     },
   },
 
