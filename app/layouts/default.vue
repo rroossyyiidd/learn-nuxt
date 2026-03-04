@@ -69,19 +69,6 @@
 
       <v-spacer />
 
-      <!-- Dark/Light mode toggle -->
-      <v-btn
-        icon
-        variant="text"
-        class="mr-1"
-        @click="toggleTheme"
-      >
-        <v-icon :icon="isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'" />
-        <v-tooltip activator="parent" location="bottom">
-          {{ isDark ? 'Light Mode' : 'Dark Mode' }}
-        </v-tooltip>
-      </v-btn>
-
       <v-menu offset-y>
         <template #activator="{ props }">
           <v-btn
@@ -138,19 +125,8 @@
 </template>
 
 <script setup lang="ts">
-import { useTheme } from 'vuetify'
-
 const { user, logout } = useAuth()
 const route = useRoute()
-const theme = useTheme()
-
-const isDark = computed(() => theme.global.current.value.dark)
-
-const toggleTheme = () => {
-  const next = isDark.value ? 'light' : 'dark'
-  theme.global.name.value = next
-  localStorage.setItem('theme-preference', next)
-}
 
 const drawer = ref(true)
 const rail = ref(false)

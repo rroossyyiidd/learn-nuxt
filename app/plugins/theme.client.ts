@@ -3,10 +3,10 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.hook('app:created', () => {
     if (import.meta.client) {
       const saved = localStorage.getItem('theme-preference')
-      const theme = (saved === 'dark' || saved === 'light') ? saved : 'light'
-      const vuetify = nuxtApp.$vuetify as { theme?: { global: { name: { value: string } } } }
+      const themeName = (saved === 'dark' || saved === 'light') ? saved : 'light'
+      const vuetify = nuxtApp.$vuetify as { theme?: { change: (name: string) => void } }
       if (vuetify?.theme) {
-        vuetify.theme.global.name.value = theme
+        vuetify.theme.change(themeName)
       }
     }
   })
