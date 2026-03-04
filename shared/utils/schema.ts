@@ -38,7 +38,7 @@ export const sewaSchema = z.object({
   pelangganName: z.string().min(1, 'Pelanggan name is required'),
   items: z.array(sewaItemSchema).min(1, 'At least one film is required'),
   totalPrice: z.number().min(0, 'Min 0'),
-  status: z.enum(['Aktif', 'Selesai', 'Terlambat']).default('Aktif'),
+  status: z.nativeEnum(ESewaStatus).default(ESewaStatus.AKTIF),
   rentalDate: z.string().min(1, 'Rental date is required'),
 })
 

@@ -197,7 +197,7 @@ const queryClient = useQueryClient()
 
 const isSubmitting = ref(false)
 const selectedPelanggan = ref<TPelanggan | null>(null)
-const statusOptions = ['Aktif', 'Selesai', 'Terlambat']
+const statusOptions = Object.values(ESewaStatus)
 
 // Fetch pelanggan & films
 const { data: pelangganData } = usePelanggan()
@@ -213,7 +213,7 @@ const form = reactive({
   pelangganId: '',
   pelangganName: '',
   rentalDate: new Date().toISOString().split('T')[0]!,
-  status: 'Aktif' as 'Aktif' | 'Selesai' | 'Terlambat',
+  status: ESewaStatus.AKTIF as ESewaStatus,
   items: [
     { filmId: '', filmTitle: '', duration: 1, rentalPrice: 0 },
   ] as { filmId: string, filmTitle: string, duration: number, rentalPrice: number }[],

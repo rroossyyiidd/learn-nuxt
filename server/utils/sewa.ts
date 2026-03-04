@@ -11,7 +11,7 @@ export type TSewa = {
   pelangganName: string
   items: TSewaItem[]
   totalPrice: number
-  status: 'Aktif' | 'Selesai' | 'Terlambat'
+  status: ESewaStatus
   rentalDate: string
   createdAt: string
   updatedAt: string
@@ -28,7 +28,7 @@ const sewaList: TSewa[] = [
       { filmId: '2', filmTitle: 'The Dark Knight', duration: 2, rentalPrice: 30000 },
     ],
     totalPrice: 75000,
-    status: 'Aktif',
+    status: ESewaStatus.AKTIF,
     rentalDate: '2026-03-01',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -41,7 +41,7 @@ const sewaList: TSewa[] = [
       { filmId: '3', filmTitle: 'Interstellar', duration: 5, rentalPrice: 75000 },
     ],
     totalPrice: 75000,
-    status: 'Selesai',
+    status: ESewaStatus.SELESAI,
     rentalDate: '2026-02-20',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

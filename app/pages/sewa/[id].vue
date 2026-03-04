@@ -229,7 +229,7 @@ const queryClient = useQueryClient()
 const sewaId = route.params.id as string
 const isSubmitting = ref(false)
 const selectedPelanggan = ref<TPelanggan | null>(null)
-const statusOptions = ['Aktif', 'Selesai', 'Terlambat']
+const statusOptions = Object.values(ESewaStatus)
 
 // Fetch data
 const { data: sewaData, isLoading, error } = useSewaDetail(sewaId)
@@ -243,7 +243,7 @@ const form = reactive({
   pelangganId: '',
   pelangganName: '',
   rentalDate: '',
-  status: 'Aktif' as 'Aktif' | 'Selesai' | 'Terlambat',
+  status: ESewaStatus.AKTIF as ESewaStatus,
   items: [] as { filmId: string, filmTitle: string, duration: number, rentalPrice: number }[],
 })
 

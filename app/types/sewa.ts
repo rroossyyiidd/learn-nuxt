@@ -11,7 +11,7 @@ export type TSewa = {
   pelangganName: string
   items: TSewaItem[]
   totalPrice: number
-  status: 'Aktif' | 'Selesai' | 'Terlambat'
+  status: ESewaStatus
   rentalDate: string
   createdAt: string
   updatedAt: string

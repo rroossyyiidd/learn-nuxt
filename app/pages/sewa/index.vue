@@ -158,12 +158,12 @@ const showSnackbar = inject<(text: string, color?: string) => void>('showSnackba
 const queryClient = useQueryClient()
 
 const search = ref('')
-const selectedStatus = ref('')
+const selectedStatus = ref<ESewaStatus | null>(null)
 const deleteDialog = ref(false)
 const sewaToDelete = ref<TSewa | null>(null)
 const isDeleting = ref(false)
 
-const statusOptions = ['Aktif', 'Selesai', 'Terlambat']
+const statusOptions = Object.values(ESewaStatus)
 
 const headers = [
   { title: 'Pelanggan', key: 'pelangganName' },
@@ -191,23 +191,7 @@ const filteredSewa = computed(() => {
   return list
 })
 
-const statusColor = (status: string) => {
-  switch (status) {
-    case 'Aktif': return 'info'
-    case 'Selesai': return 'success'
-    case 'Terlambat': return 'error'
-    default: return 'grey'
-  }
-}
 
-const statusIcon = (status: string) => {
-  switch (status) {
-    case 'Aktif': return 'mdi-clock-outline'
-    case 'Selesai': return 'mdi-check-circle'
-    case 'Terlambat': return 'mdi-alert'
-    default: return 'mdi-help-circle'
-  }
-}
 
 const confirmDelete = (sewa: TSewa) => {
   sewaToDelete.value = sewa
