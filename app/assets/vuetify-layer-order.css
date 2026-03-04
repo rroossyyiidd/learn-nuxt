@@ -1,0 +1,15 @@
+/*
+  This file must be loaded BEFORE Vuetify's main.css and before the
+  vuetify-theme-stylesheet inline <style> tag is injected.
+
+  Vuetify 4 wraps its theme CSS variables inside @layer vuetify-utilities,
+  which gets injected as an inline <style> before main.css loads.
+  When the browser first encounters @layer vuetify-utilities from that inline
+  style, it registers it as the first (lowest-priority) layer, causing all
+  utility classes (pa-*, px-*, ma-*, etc.) in @layer vuetify-utilities to be
+  overridden by component styles in @layer vuetify-components.
+
+  By declaring the layer order here first, we ensure the browser follows
+  the intended priority: components < overrides < utilities.
+*/
+@layer vuetify-core, vuetify-components, vuetify-overrides, vuetify-utilities, vuetify-final;
