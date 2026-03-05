@@ -160,6 +160,8 @@
 </template>
 
 <script setup lang="ts">
+useHead({ title: 'Edit Film' })
+
 const route = useRoute()
 const config = useRuntimeConfig()
 const tmdbImageBase = config.public.tmdbImageBase

@@ -32,6 +32,8 @@ definePageMeta({
   layout: false,
 })
 
+useHead({ title: 'Confirm' })
+
 const { fetchUser } = useAuth()
 const { mutateAsync: setOAuthSessionMutation } = useSetOAuthSession()
 

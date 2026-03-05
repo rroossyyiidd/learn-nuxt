@@ -192,6 +192,8 @@
 </template>
 
 <script setup lang="ts">
+useHead({ title: 'Dashboard' })
+
 const { user } = useAuth()
 const config = useRuntimeConfig()
 const tmdbImageBase = config.public.tmdbImageBase

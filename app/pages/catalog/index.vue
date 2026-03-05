@@ -341,6 +341,8 @@
 </template>
 
 <script setup lang="ts">
+useHead({ title: 'Film Catalog' })
+
 const config = useRuntimeConfig()
 const tmdbImageBase = config.public.tmdbImageBase
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')

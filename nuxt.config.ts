@@ -30,6 +30,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      titleTemplate: '%s | CD Rental Admin',
       // This inline style MUST be the very first style in <head> to establish
       // the correct CSS layer cascade order before Vuetify's inline
       // vuetify-theme-stylesheet is injected. Without this, @layer

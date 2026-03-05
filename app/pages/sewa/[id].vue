@@ -191,6 +191,8 @@
 </template>
 
 <script setup lang="ts">
+useHead({ title: 'Edit Sewa' })
+
 const route = useRoute()
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')
 

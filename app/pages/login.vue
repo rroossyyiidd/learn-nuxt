@@ -110,6 +110,8 @@ definePageMeta({
   layout: false,
 })
 
+useHead({ title: 'Login' })
+
 const { login } = useAuth()
 
 const form = reactive({

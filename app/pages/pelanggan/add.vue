@@ -84,6 +84,8 @@
 </template>
 
 <script setup lang="ts">
+useHead({ title: 'Tambah Pelanggan' })
+
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')
 
 const membershipTypes = ['Silver', 'Gold', 'Platinum']

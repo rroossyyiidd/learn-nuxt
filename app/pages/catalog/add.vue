@@ -188,6 +188,8 @@
 </template>
 
 <script setup lang="ts">
+useHead({ title: 'Add New Film' })
+
 const config = useRuntimeConfig()
 const tmdbImageBase = config.public.tmdbImageBase
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')
