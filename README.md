@@ -8,8 +8,11 @@ An admin panel application for managing CD/Film rentals, built with **Nuxt 4** a
 - **Film Catalog** — Full CRUD with TMDB search integration, auto-filled posters, and genre filtering
 - **Customer Management** — CRUD for customer data with membership tiers (Silver / Gold / Platinum)
 - **Rental Management** — CRUD for rental transactions with multi-item support and status tracking (Aktif / Selesai / Terlambat)
-- **Authentication** — Login/logout with cookie-based sessions and global route guard
+- **Authentication** — Multi-provider authentication with Supabase:
+  - Local Login with username & password (cookie-based sessions)
+  - **OAuth Integration** with GitHub and GitLab
 - **Dark / Light Mode** — Theme toggle with localStorage-persisted preference
+- **Modular Architecture** — UI components (`ConfirmDialog`, `ErrorState`, `LoadingState`, etc.) and dedicated TanStack Query mutations (`useCatalogMutations`, `usePelangganMutations`, etc.)
 
 ## 🛠️ Tech Stack
 
@@ -19,6 +22,7 @@ An admin panel application for managing CD/Film rentals, built with **Nuxt 4** a
 | UI Framework | [Vuetify 3](https://vuetifyjs.com/) via `vuetify-nuxt-module` |
 | State / Fetching | [TanStack Query](https://tanstack.com/query) via `@peterbud/nuxt-query` |
 | Validation | [Zod 4](https://zod.dev/) |
+| Authentication | [Supabase](https://supabase.com/) (`@supabase/supabase-js`) |
 | Styling | SCSS (via `sass-embedded`) |
 | Icons | [Material Design Icons](https://materialdesignicons.com/) (`@mdi/font`) |
 | External API | [TMDB API](https://developer.themoviedb.org/) (film search & genres) |
@@ -31,88 +35,67 @@ learn-nuxt-dot/
 │   ├── app.vue                    # Root component
 │   ├── assets/
 │   │   └── vuetify-layer-order.css  # CSS layer ordering for Vuetify
+│   ├── components/                # Reusable UI components
+│   │   ├── ConfirmDialog.vue
+│   │   ├── ErrorState.vue
+│   │   ├── FormActions.vue
+│   │   ├── LoadingState.vue
+│   │   ├── PageHeader.vue
+│   │   └── PageListHeader.vue
 │   ├── composables/               # Custom composables (auto-imported)
 │   │   ├── auth/
-│   │   │   └── useAuth.ts           # Login, logout, fetch user
+│   │   │   ├── useAuth.ts           # Login, logout, fetch user
+│   │   │   ├── useOAuthSession.ts   # OAuth session mutation
+│   │   │   └── useSupabase.ts       # Supabase client singleton
 │   │   ├── catalog/
 │   │   │   ├── useCatalog.ts        # Film list query
 │   │   │   ├── useCatalogFilm.ts    # Single film detail query
+│   │   │   ├── useCatalogMutations.ts # Add, Update, Delete queries
 │   │   │   └── useCatalogStats.ts   # Catalog statistics query
 │   │   ├── pelanggan/
 │   │   │   ├── usePelanggan.ts      # Customer list query
-│   │   │   └── usePelangganDetail.ts
+│   │   │   ├── usePelangganDetail.ts
+│   │   │   └── usePelangganMutations.ts
 │   │   ├── sewa/
 │   │   │   ├── useSewa.ts           # Rental list query
-│   │   │   └── useSewaDetail.ts
+│   │   │   ├── useSewaDetail.ts
+│   │   │   └── useSewaMutations.ts
 │   │   └── tmdb/
 │   │       ├── useTmdbSearch.ts     # TMDB film search query
 │   │       └── useTmdbGenres.ts     # TMDB genre list query
 │   ├── layouts/
 │   │   ├── default.vue            # Main layout (sidebar + app bar)
-│   │   └── auth.vue               # Login page layout
+│   │   └── auth.vue               # Login/Auth layouts
 │   ├── middleware/
 │   │   └── auth.global.ts         # Route guard: redirects to /login if unauthenticated
 │   ├── pages/
 │   │   ├── index.vue              # Dashboard
-│   │   ├── login.vue              # Login page
-│   │   ├── catalog/
-│   │   │   ├── index.vue            # Film list with search/filter
-│   │   │   ├── add.vue              # Add film (+ TMDB search)
-│   │   │   └── [id].vue            # Edit film
-│   │   ├── pelanggan/
-│   │   │   ├── index.vue            # Customer list
-│   │   │   ├── add.vue              # Add customer
-│   │   │   └── [id].vue            # Edit customer
-│   │   └── sewa/
-│   │       ├── index.vue            # Rental list
-│   │       ├── add.vue              # Add rental
-│   │       └── [id].vue            # Edit rental
+│   │   ├── login.vue              # Login page (Local + OAuth)
+│   │   ├── confirm.vue            # OAuth callback processing page
+│   │   ├── catalog/               # Catalog CRUD views
+│   │   ├── pelanggan/             # Customer CRUD views
+│   │   └── sewa/                  # Rental CRUD views
 │   ├── plugins/
 │   │   └── theme.client.ts        # Restores theme preference from localStorage
-│   └── types/                     # TypeScript type definitions (auto-imported)
-│       ├── auth.ts                  # TUser, TLoginResponse, TMeResponse
-│       ├── film.ts                  # TFilm, TCatalogResponse, TCatalogStats
-│       ├── genre.ts                 # EAvailableGenre enum
-│       ├── pelanggan.ts             # TPelanggan, TPelangganResponse
-│       ├── sewa.ts                  # TSewa, TSewaItem, TSewaResponse
-│       └── tmdb.ts                  # TTmdbMovie, TTmdbSearchResponse
+│   ├── types/                     # TypeScript type definitions (auto-imported)
+│   └── utils/                     # Utility functions (Client-side)
+│       └── status.ts              # Rental status colors and icons
 ├── server/
 │   ├── api/
 │   │   ├── auth/
 │   │   │   ├── login.post.ts        # POST /api/auth/login
 │   │   │   ├── logout.post.ts       # POST /api/auth/logout
-│   │   │   └── me.get.ts            # GET  /api/auth/me
-│   │   ├── catalog/
-│   │   │   ├── index.get.ts         # GET  /api/catalog
-│   │   │   ├── index.post.ts        # POST /api/catalog
-│   │   │   ├── [id].get.ts          # GET  /api/catalog/:id
-│   │   │   ├── [id].put.ts          # PUT  /api/catalog/:id
-│   │   │   ├── [id].delete.ts       # DEL  /api/catalog/:id
-│   │   │   └── stats.get.ts         # GET  /api/catalog/stats
-│   │   ├── pelanggan/
-│   │   │   ├── index.get.ts         # GET  /api/pelanggan
-│   │   │   ├── index.post.ts        # POST /api/pelanggan
-│   │   │   ├── [id].get.ts          # GET  /api/pelanggan/:id
-│   │   │   ├── [id].put.ts          # PUT  /api/pelanggan/:id
-│   │   │   └── [id].delete.ts       # DEL  /api/pelanggan/:id
-│   │   ├── sewa/
-│   │   │   ├── index.get.ts         # GET  /api/sewa
-│   │   │   ├── index.post.ts        # POST /api/sewa
-│   │   │   ├── [id].get.ts          # GET  /api/sewa/:id
-│   │   │   ├── [id].put.ts          # PUT  /api/sewa/:id
-│   │   │   └── [id].delete.ts       # DEL  /api/sewa/:id
-│   │   └── tmdb/
-│   │       ├── search.get.ts        # GET  /api/tmdb/search?query=...
-│   │       ├── genres.get.ts        # GET  /api/tmdb/genres
-│   │       └── [id].get.ts          # GET  /api/tmdb/:id
+│   │   │   ├── me.get.ts            # GET  /api/auth/me
+│   │   │   └── oauth-session.get.ts # GET  /api/auth/oauth-session
+│   │   ├── catalog/               # Catalog API Endpoints
+│   │   ├── pelanggan/             # Pelanggan API Endpoints
+│   │   ├── sewa/                  # Sewa API Endpoints
+│   │   └── tmdb/                  # TMDB API Endpoints
 │   └── utils/                     # Server-side data layer (in-memory storage)
-│       ├── catalog.ts               # Film CRUD + stats functions
-│       ├── pelanggan.ts             # Customer CRUD functions
-│       ├── sewa.ts                  # Rental CRUD functions
-│       └── tmdb-types.ts            # TMDB API type definitions
 ├── shared/
 │   └── utils/
-│       └── schema.ts             # Zod validation schemas (shared between client & server)
+│       ├── enum.ts               # Shared enums (e.g., ESewaStatus)
+│       └── schema.ts             # Zod validation schemas (shared client & server)
 ├── nuxt.config.ts                 # Nuxt config, Vuetify theme, runtime config
 ├── package.json
 └── tsconfig.json
@@ -124,8 +107,9 @@ learn-nuxt-dot/
 | Method | Endpoint | Description |
 |---|---|---|
 | `POST` | `/api/auth/login` | Login with username & password |
-| `POST` | `/api/auth/logout` | Logout (clears cookie) |
+| `POST` | `/api/auth/logout` | Logout (clears session cookie) |
 | `GET` | `/api/auth/me` | Get current user from session cookie |
+| `GET` | `/api/auth/oauth-session` | Initialize manual session cookie for OAuth flow |
 
 ### Catalog (Films)
 | Method | Endpoint | Description |
@@ -186,7 +170,7 @@ Create a `.env` file in the project root:
 # TMDB API Token (https://developer.themoviedb.org/)
 TMDB_TOKEN=your_tmdb_bearer_token
 
-# Supabase (optional)
+# Supabase Database URL & Keys (Required for OAuth)
 SUPABASE_URL=your_supabase_url
 SUPABASE_KEY=your_supabase_anon_key
 ```
@@ -232,5 +216,6 @@ Theme toggle is available in the app bar. Preference is persisted to `localStora
 ## 📝 Notes
 
 - **Data Storage** — The server uses **in-memory storage**; all data resets on server restart. Designed for development and learning purposes.
-- **Authentication** — Uses hardcoded credentials with cookie-based sessions. Not intended for production use.
+- **Authentication** — Combines local session-based authentication with Supabase OAuth for external providers. `useSupabase` handles the integration.
+- **TanStack Query** — The project now uses standalone mutation composables (e.g. `useCatalogMutations.ts`) for clean abstraction of Vue query features.
 - **TMDB Integration** — The "Add Film" page fetches film data from TMDB API (poster, overview, genres, rating) to auto-fill the form.
