@@ -59,7 +59,7 @@
         <!-- OAuth Divider -->
         <div class="d-flex align-center my-5">
           <v-divider />
-          <span class="mx-3 text-body-2 text-medium-emphasis">or continue with</span>
+          <span class="mx-3 text-body-2 text-medium-emphasis text-no-wrap">or continue with</span>
           <v-divider />
         </div>
 
