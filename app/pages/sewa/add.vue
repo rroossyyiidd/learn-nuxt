@@ -259,15 +259,6 @@ const recalcItemPrice = (index: number, duration?: number) => {
   }
 }
 
-const getItemPriceHint = (index: number): string => {
-  const item = form.items[index]!
-  const film = filmOptions.value.find((f: TFilm) => f.id === item.filmId)
-  if (film && item.duration) {
-    return `Rp ${film.rentalPrice.toLocaleString('id-ID')}/hari × ${item.duration} hari`
-  }
-  return ''
-}
-
 const addItem = () => {
   form.items.push({ filmId: '', filmTitle: '', duration: 1, rentalPrice: 0 })
 }

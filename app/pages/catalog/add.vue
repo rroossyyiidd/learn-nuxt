@@ -182,8 +182,6 @@
                     :error-messages="fieldErrors.rentalPrice"
                   />
                 </v-col>
-
-
               </v-row>
             </v-col>
           </v-row>
@@ -217,7 +215,6 @@
 </template>
 
 <script setup lang="ts">
-
 const config = useRuntimeConfig()
 const tmdbImageBase = config.public.tmdbImageBase
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')

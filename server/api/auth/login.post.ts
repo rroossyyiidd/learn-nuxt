@@ -1,5 +1,3 @@
-
-
 const ADMIN_USER = {
   username: 'admin',
   password: 'admin123',

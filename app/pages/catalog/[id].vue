@@ -192,8 +192,6 @@
 </template>
 
 <script setup lang="ts">
-
-
 const route = useRoute()
 const config = useRuntimeConfig()
 const tmdbImageBase = config.public.tmdbImageBase
@@ -202,8 +200,6 @@ const queryClient = useQueryClient()
 
 const filmId = route.params.id as string
 const isSubmitting = ref(false)
-
-
 
 // Fetch film data
 const { data: filmData, isLoading, error } = useCatalogFilm(filmId)

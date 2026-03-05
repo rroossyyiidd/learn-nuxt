@@ -42,7 +42,6 @@
               prepend-inner-icon="mdi-magnify"
               clearable
               hide-details
-              @update:model-value="debouncedSearch"
             />
           </v-col>
           <v-col cols="12" md="3">
@@ -401,11 +400,6 @@ const filteredFilms = computed(() => {
   }
   return films
 })
-
-let searchTimeout: ReturnType<typeof setTimeout>
-const debouncedSearch = () => {
-  // client-side filter, no need to debounce server call
-}
 
 const debouncedTmdbSearch = () => {
   tmdbQueryKeyRef.value = tmdbSearch.value
