@@ -5,14 +5,15 @@ An admin panel application for managing CD/Film rentals, built with **Nuxt 4** a
 ## ✨ Features
 
 - **Dashboard** — Catalog statistics overview: total films, genres, stock, average rating, genre distribution, and recent films
-- **Film Catalog** — Full CRUD with TMDB search integration, auto-filled posters, and genre filtering
+- **Film Catalog** — Full CRUD with TMDB search integration, duplicate film validation, auto-filled posters, and genre filtering
 - **Customer Management** — CRUD for customer data with membership tiers (Silver / Gold / Platinum)
 - **Rental Management** — CRUD for rental transactions with multi-item support and status tracking (Aktif / Selesai / Terlambat)
 - **Authentication** — Multi-provider authentication with Supabase:
   - Local Login with username & password (cookie-based sessions)
   - **OAuth Integration** with GitHub and GitLab
+- **Dynamic Page Titles** — Browser tab titles automatically update to match the current page's content
 - **Dark / Light Mode** — Theme toggle with localStorage-persisted preference
-- **Modular Architecture** — UI components (`ConfirmDialog`, `ErrorState`, `LoadingState`, etc.) and dedicated TanStack Query mutations (`useCatalogMutations`, `usePelangganMutations`, etc.)
+- **Modular Architecture** — Extracted reusable UI components (`PageHeader`, `FormActions`, `ConfirmDialog`, `ErrorState`, etc.) and feature-colocated composables/types (`app/pages/*/-composables`)
 
 ## 🛠️ Tech Stack
 
