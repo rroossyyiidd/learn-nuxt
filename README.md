@@ -53,9 +53,7 @@ learn-nuxt-dot/
 │   │   │   ├── useCatalogMutations.ts # Add, Update, Delete queries
 │   │   │   └── useCatalogStats.ts   # Catalog statistics query
 │   │   ├── pelanggan/
-│   │   │   ├── usePelanggan.ts      # Customer list query
-│   │   │   ├── usePelangganDetail.ts
-│   │   │   └── usePelangganMutations.ts
+│   │   │   └── usePelanggan.ts      # Customer list query (Shared with sewa)
 │   │   ├── sewa/
 │   │   │   ├── useSewa.ts           # Rental list query
 │   │   │   ├── useSewaDetail.ts
@@ -74,6 +72,10 @@ learn-nuxt-dot/
 │   │   ├── confirm.vue            # OAuth callback processing page
 │   │   ├── catalog/               # Catalog CRUD views
 │   │   ├── pelanggan/             # Customer CRUD views
+│   │   │   ├── -hooks/            # Colocated hooks (usePelangganDetail, Mutations)
+│   │   │   ├── -types/            # Colocated types (TPelangganDetailResponse)
+│   │   │   ├── index.vue
+│   │   │   └── ...
 │   │   └── sewa/                  # Rental CRUD views
 │   ├── plugins/
 │   │   └── theme.client.ts        # Restores theme preference from localStorage
