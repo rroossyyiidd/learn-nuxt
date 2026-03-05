@@ -312,6 +312,16 @@
               </template>
               <v-list-item-title class="font-weight-bold">
                 {{ movie.title }}
+                <v-chip
+                  v-if="existingTmdbIds.has(movie.id)"
+                  size="x-small"
+                  color="success"
+                  variant="tonal"
+                  class="ml-2"
+                >
+                  <v-icon icon="mdi-check-circle" size="x-small" class="mr-1" />
+                  Already Added
+                </v-chip>
               </v-list-item-title>
               <v-list-item-subtitle>
                 {{ movie.release_date }} · ⭐ {{ movie.vote_average?.toFixed(1) }}
@@ -321,6 +331,17 @@
               </v-list-item-subtitle>
               <template #append>
                 <v-btn
+                  v-if="existingTmdbIds.has(movie.id)"
+                  variant="tonal"
+                  size="small"
+                  class="text-none"
+                  disabled
+                >
+                  <v-icon icon="mdi-check" class="mr-1" />
+                  Added
+                </v-btn>
+                <v-btn
+                  v-else
                   color="primary"
                   variant="tonal"
                   size="small"
@@ -388,6 +409,14 @@ const allGenres = computed(() => {
   return Array.from(genres).sort()
 })
 
+const existingTmdbIds = computed(() => {
+  const ids = new Set<number>()
+  catalogData.value?.films?.forEach((f: TFilm) => {
+    if (f.tmdbId) ids.add(f.tmdbId)
+  })
+  return ids
+})
+
 const filteredFilms = computed(() => {
   let films = catalogData.value?.films || []
   if (search.value) {
@@ -441,8 +470,11 @@ const importFromTmdb = async (movie: TTmdbMovie) => {
     })
     showSnackbar?.(`"${movie.title}" imported successfully!`)
   }
-  catch {
-    showSnackbar?.('Failed to import film', 'error')
+  catch (error: any) {
+    const message = error?.response?.status === 409
+      ? `Film "${movie.title}" sudah ada di catalog`
+      : 'Failed to import film'
+    showSnackbar?.(message, 'error')
   }
   finally {
     importingId.value = null

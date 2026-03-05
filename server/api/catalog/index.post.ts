@@ -10,6 +10,16 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  if (result.data.tmdbId) {
+    const existing = getFilms().find(f => f.tmdbId === result.data.tmdbId)
+    if (existing) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: `Film "${existing.title}" sudah ada di catalog`,
+      })
+    }
+  }
+
   const film = addFilm({
     ...result.data,
     posterPath: result.data.posterPath ?? null,
