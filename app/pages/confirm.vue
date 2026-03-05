@@ -33,6 +33,7 @@ definePageMeta({
 })
 
 const { fetchUser } = useAuth()
+const { mutateAsync: setOAuthSessionMutation } = useSetOAuthSession()
 
 const loading = ref(true)
 const error = ref('')
@@ -68,14 +69,14 @@ onMounted(async () => {
         }
 
         // Use the exchanged session
-        await setOAuthSession(exchangeData.session.user)
+        await handleOAuthSession(exchangeData.session.user)
       }
       else {
         throw new Error('No authentication session found')
       }
     }
     else {
-      await setOAuthSession(data.session.user)
+      await handleOAuthSession(data.session.user)
     }
   }
   catch (err: unknown) {
@@ -88,7 +89,7 @@ onMounted(async () => {
   }
 })
 
-async function setOAuthSession(user: { user_metadata?: { full_name?: string; name?: string; preferred_username?: string; avatar_url?: string }; email?: string }) {
+async function handleOAuthSession(user: { user_metadata?: { full_name?: string; name?: string; preferred_username?: string; avatar_url?: string }; email?: string }) {
   const name = user.user_metadata?.full_name
     || user.user_metadata?.name
     || user.user_metadata?.preferred_username
@@ -96,9 +97,7 @@ async function setOAuthSession(user: { user_metadata?: { full_name?: string; nam
   const email = user.email || ''
 
   // Call server endpoint to set the httpOnly auth cookie
-  await $fetch('/api/auth/oauth-session', {
-    params: { name, email },
-  })
+  await setOAuthSessionMutation({ name, email })
 
   // Fetch user info into the auth state
   await fetchUser()

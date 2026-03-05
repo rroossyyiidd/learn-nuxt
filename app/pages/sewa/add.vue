@@ -193,15 +193,16 @@
 
 <script setup lang="ts">
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')
-const queryClient = useQueryClient()
 
-const isSubmitting = ref(false)
 const selectedPelanggan = ref<TPelanggan | null>(null)
 const statusOptions = Object.values(ESewaStatus)
 
 // Fetch pelanggan & films
 const { data: pelangganData } = usePelanggan()
 const { data: catalogData } = useCatalog()
+
+// Mutation
+const { mutateAsync: addSewa, isPending: isSubmitting } = useAddSewa()
 
 const pelangganOptions = computed(() =>
   (pelangganData.value?.pelanggan || []).filter((p: TPelanggan) => p.isActive),
@@ -299,22 +300,14 @@ const handleSubmit = async () => {
     return
   }
 
-  isSubmitting.value = true
   try {
-    await $fetch('/api/sewa', {
-      method: 'POST',
-      body: result.data,
-    })
+    await addSewa(result.data as Record<string, unknown>)
     showSnackbar?.('Data sewa berhasil ditambahkan!')
-    queryClient.invalidateQueries({ queryKey: ['sewa'] })
     navigateTo('/sewa')
   }
   catch (err: unknown) {
     const fetchErr = err as { data?: { statusMessage?: string } }
     showSnackbar?.(fetchErr?.data?.statusMessage || 'Gagal menambahkan data sewa', 'error')
-  }
-  finally {
-    isSubmitting.value = false
   }
 }
 </script>

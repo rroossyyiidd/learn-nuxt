@@ -218,13 +218,14 @@
 const config = useRuntimeConfig()
 const tmdbImageBase = config.public.tmdbImageBase
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')
-const queryClient = useQueryClient()
 
-const isSubmitting = ref(false)
 const selectedTmdbMovie = ref<TTmdbMovieOption | null>(null)
 
 const { tmdbSearchQuery, isTmdbLoading, tmdbMovieOptions } = useTmdbSearch('tmdb-search-form')
 const { genreMap } = useTmdbGenres()
+
+// Mutation
+const { mutateAsync: addCatalog, isPending: isSubmitting } = useAddCatalog()
 
 const form = reactive({
   title: '',
@@ -278,23 +279,14 @@ const handleSubmit = async () => {
     return
   }
 
-  isSubmitting.value = true
   try {
-    await $fetch('/api/catalog', {
-      method: 'POST',
-      body: result.data,
-    })
+    await addCatalog(result.data as Record<string, unknown>)
     showSnackbar?.('Film added successfully!')
-    queryClient.invalidateQueries({ queryKey: ['catalog'] })
-    queryClient.invalidateQueries({ queryKey: ['catalog-stats'] })
     navigateTo('/catalog')
   }
   catch (err: unknown) {
     const fetchErr = err as { data?: { statusMessage?: string } }
     showSnackbar?.(fetchErr?.data?.statusMessage || 'Failed to add film', 'error')
-  }
-  finally {
-    isSubmitting.value = false
   }
 }
 </script>

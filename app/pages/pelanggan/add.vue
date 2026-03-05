@@ -111,10 +111,11 @@
 
 <script setup lang="ts">
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')
-const queryClient = useQueryClient()
 
-const isSubmitting = ref(false)
 const membershipTypes = ['Silver', 'Gold', 'Platinum']
+
+// Mutation
+const { mutateAsync: addPelanggan, isPending: isSubmitting } = useAddPelanggan()
 
 const form = reactive({
   name: '',
@@ -147,22 +148,14 @@ const handleSubmit = async () => {
     return
   }
 
-  isSubmitting.value = true
   try {
-    await $fetch('/api/pelanggan', {
-      method: 'POST',
-      body: result.data,
-    })
+    await addPelanggan(result.data as Record<string, unknown>)
     showSnackbar?.('Pelanggan berhasil ditambahkan!')
-    queryClient.invalidateQueries({ queryKey: ['pelanggan'] })
     navigateTo('/pelanggan')
   }
   catch (err: unknown) {
     const fetchErr = err as { data?: { statusMessage?: string } }
     showSnackbar?.(fetchErr?.data?.statusMessage || 'Gagal menambahkan pelanggan', 'error')
-  }
-  finally {
-    isSubmitting.value = false
   }
 }
 </script>

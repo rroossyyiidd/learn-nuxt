@@ -224,10 +224,8 @@
 <script setup lang="ts">
 const route = useRoute()
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')
-const queryClient = useQueryClient()
 
 const sewaId = route.params.id as string
-const isSubmitting = ref(false)
 const selectedPelanggan = ref<TPelanggan | null>(null)
 const statusOptions = Object.values(ESewaStatus)
 
@@ -235,6 +233,9 @@ const statusOptions = Object.values(ESewaStatus)
 const { data: sewaData, isLoading, error } = useSewaDetail(sewaId)
 const { data: pelangganData } = usePelanggan()
 const { data: catalogData } = useCatalog()
+
+// Mutation
+const { mutateAsync: updateSewa, isPending: isSubmitting } = useUpdateSewa(sewaId)
 
 const pelangganOptions = computed(() => pelangganData.value?.pelanggan || [])
 const filmOptions = computed(() => catalogData.value?.films || [])
@@ -347,22 +348,14 @@ const handleSubmit = async () => {
     return
   }
 
-  isSubmitting.value = true
   try {
-    await $fetch<TSewaDetailResponse>(`/api/sewa/${sewaId}`, {
-      method: 'PUT',
-      body: result.data,
-    })
+    await updateSewa(result.data as Record<string, unknown>)
     showSnackbar?.('Data sewa berhasil diupdate!')
-    queryClient.invalidateQueries({ queryKey: ['sewa'] })
     navigateTo('/sewa')
   }
   catch (err: unknown) {
     const fetchErr = err as { data?: { statusMessage?: string } }
     showSnackbar?.(fetchErr?.data?.statusMessage || 'Gagal mengupdate data sewa', 'error')
-  }
-  finally {
-    isSubmitting.value = false
   }
 }
 </script>

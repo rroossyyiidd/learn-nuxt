@@ -196,13 +196,14 @@ const route = useRoute()
 const config = useRuntimeConfig()
 const tmdbImageBase = config.public.tmdbImageBase
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')
-const queryClient = useQueryClient()
 
 const filmId = route.params.id as string
-const isSubmitting = ref(false)
 
 // Fetch film data
 const { data: filmData, isLoading, error } = useCatalogFilm(filmId)
+
+// Mutation
+const { mutateAsync: updateCatalog, isPending: isSubmitting } = useUpdateCatalog(filmId)
 
 const form = reactive({
   title: '',
@@ -257,23 +258,14 @@ const handleSubmit = async () => {
     return
   }
 
-  isSubmitting.value = true
   try {
-    await $fetch<TFilmResponse>(`/api/catalog/${filmId}`, {
-      method: 'PUT',
-      body: result.data,
-    })
+    await updateCatalog(result.data as Record<string, unknown>)
     showSnackbar?.('Film updated successfully!')
-    queryClient.invalidateQueries({ queryKey: ['catalog'] })
-    queryClient.invalidateQueries({ queryKey: ['catalog-stats'] })
     navigateTo('/catalog')
   }
   catch (err: unknown) {
     const fetchErr = err as { data?: { statusMessage?: string } }
     showSnackbar?.(fetchErr?.data?.statusMessage || 'Failed to update film', 'error')
-  }
-  finally {
-    isSubmitting.value = false
   }
 }
 </script>

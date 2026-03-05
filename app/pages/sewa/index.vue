@@ -155,13 +155,11 @@
 
 <script setup lang="ts">
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')
-const queryClient = useQueryClient()
 
 const search = ref('')
 const selectedStatus = ref<ESewaStatus | null>(null)
 const deleteDialog = ref(false)
 const sewaToDelete = ref<TSewa | null>(null)
-const isDeleting = ref(false)
 
 const statusOptions = Object.values(ESewaStatus)
 
@@ -175,6 +173,9 @@ const headers = [
 ]
 
 const { data: sewaData, isLoading } = useSewa()
+
+// Mutation
+const { mutateAsync: deleteSewa, isPending: isDeleting } = useDeleteSewa()
 
 const filteredSewa = computed(() => {
   let list = sewaData.value?.sewa || []
@@ -198,18 +199,13 @@ const confirmDelete = (sewa: TSewa) => {
 
 const handleDelete = async () => {
   if (!sewaToDelete.value) return
-  isDeleting.value = true
   try {
-    await $fetch<{ success: boolean }>(`/api/sewa/${sewaToDelete.value.id}`, { method: 'DELETE' })
+    await deleteSewa(sewaToDelete.value.id)
     showSnackbar?.('Data sewa berhasil dihapus')
-    queryClient.invalidateQueries({ queryKey: ['sewa'] })
     deleteDialog.value = false
   }
   catch {
     showSnackbar?.('Gagal menghapus data sewa', 'error')
-  }
-  finally {
-    isDeleting.value = false
   }
 }
 </script>

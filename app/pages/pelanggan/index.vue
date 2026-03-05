@@ -155,14 +155,12 @@
 
 <script setup lang="ts">
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')
-const queryClient = useQueryClient()
 
 const search = ref('')
 const selectedMembership = ref('')
 const selectedStatus = ref<boolean | null>(null)
 const deleteDialog = ref(false)
 const pelangganToDelete = ref<TPelanggan | null>(null)
-const isDeleting = ref(false)
 
 const membershipTypes = ['Silver', 'Gold', 'Platinum']
 const statusOptions = [
@@ -180,6 +178,9 @@ const headers = [
 ]
 
 const { data: pelangganData, isLoading } = usePelanggan()
+
+// Mutation
+const { mutateAsync: deletePelanggan, isPending: isDeleting } = useDeletePelanggan()
 
 const filteredPelanggan = computed(() => {
   let list = pelangganData.value?.pelanggan || []
@@ -225,18 +226,13 @@ const confirmDelete = (pelanggan: TPelanggan) => {
 
 const handleDelete = async () => {
   if (!pelangganToDelete.value) return
-  isDeleting.value = true
   try {
-    await $fetch<{ success: boolean }>(`/api/pelanggan/${pelangganToDelete.value.id}`, { method: 'DELETE' })
+    await deletePelanggan(pelangganToDelete.value.id)
     showSnackbar?.('Pelanggan berhasil dihapus')
-    queryClient.invalidateQueries({ queryKey: ['pelanggan'] })
     deleteDialog.value = false
   }
   catch {
     showSnackbar?.('Gagal menghapus pelanggan', 'error')
-  }
-  finally {
-    isDeleting.value = false
   }
 }
 </script>

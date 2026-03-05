@@ -355,12 +355,9 @@ const selectedGenre = ref('')
 const viewMode = ref('table')
 const deleteDialog = ref(false)
 const filmToDelete = ref<TFilm | null>(null)
-const isDeleting = ref(false)
 const tmdbDialog = ref(false)
 const tmdbSearch = ref('')
 const importingId = ref<number | null>(null)
-
-const queryClient = useQueryClient()
 
 const headers = [
   { title: '', key: 'poster', width: '60px', sortable: false },
@@ -380,6 +377,10 @@ const { tmdbResults, isTmdbLoading, tmdbSearchQuery: tmdbQueryKeyRef } = useTmdb
 
 // TMDB genres
 const { genreMap } = useTmdbGenres()
+
+// Mutations
+const { mutateAsync: deleteCatalog, isPending: isDeleting } = useDeleteCatalog()
+const { mutateAsync: importCatalog } = useImportCatalogFromTmdb()
 
 const allGenres = computed(() => {
   const genres = new Set<string>()
@@ -412,19 +413,13 @@ const confirmDelete = (film: TFilm) => {
 
 const handleDelete = async () => {
   if (!filmToDelete.value) return
-  isDeleting.value = true
   try {
-    await $fetch<{ success: boolean }>(`/api/catalog/${filmToDelete.value.id}`, { method: 'DELETE' })
+    await deleteCatalog(filmToDelete.value.id)
     showSnackbar?.('Film deleted successfully')
-    queryClient.invalidateQueries({ queryKey: ['catalog'] })
-    queryClient.invalidateQueries({ queryKey: ['catalog-stats'] })
     deleteDialog.value = false
   }
-  catch (err) {
+  catch {
     showSnackbar?.('Failed to delete film', 'error')
-  }
-  finally {
-    isDeleting.value = false
   }
 }
 
@@ -432,26 +427,21 @@ const importFromTmdb = async (movie: TTmdbMovie) => {
   importingId.value = movie.id
   try {
     const genres = (movie.genre_ids || []).map((id: number) => genreMap.value[id] || 'Unknown')
-    await $fetch('/api/catalog', {
-      method: 'POST',
-      body: {
-        tmdbId: movie.id,
-        title: movie.title,
-        overview: movie.overview || '',
-        posterPath: movie.poster_path,
-        backdropPath: movie.backdrop_path,
-        releaseDate: movie.release_date || '',
-        genres: genres.length ? genres : ['Uncategorized'],
-        rating: movie.vote_average ? Math.round(movie.vote_average * 10) / 10 : 0,
-        stock: 1,
-        rentalPrice: 15000,
-      },
+    await importCatalog({
+      tmdbId: movie.id,
+      title: movie.title,
+      overview: movie.overview || '',
+      posterPath: movie.poster_path,
+      backdropPath: movie.backdrop_path,
+      releaseDate: movie.release_date || '',
+      genres: genres.length ? genres : ['Uncategorized'],
+      rating: movie.vote_average ? Math.round(movie.vote_average * 10) / 10 : 0,
+      stock: 1,
+      rentalPrice: 15000,
     })
     showSnackbar?.(`"${movie.title}" imported successfully!`)
-    queryClient.invalidateQueries({ queryKey: ['catalog'] })
-    queryClient.invalidateQueries({ queryKey: ['catalog-stats'] })
   }
-  catch (err) {
+  catch {
     showSnackbar?.('Failed to import film', 'error')
   }
   finally {

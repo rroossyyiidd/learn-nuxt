@@ -131,13 +131,14 @@
 <script setup lang="ts">
 const route = useRoute()
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')
-const queryClient = useQueryClient()
 
 const pelangganId = route.params.id as string
-const isSubmitting = ref(false)
 const membershipTypes = ['Silver', 'Gold', 'Platinum']
 
 const { data: pelangganData, isLoading, error } = usePelangganDetail(pelangganId)
+
+// Mutation
+const { mutateAsync: updatePelanggan, isPending: isSubmitting } = useUpdatePelanggan(pelangganId)
 
 const form = reactive({
   name: '',
@@ -182,22 +183,14 @@ const handleSubmit = async () => {
     return
   }
 
-  isSubmitting.value = true
   try {
-    await $fetch<TPelangganDetailResponse>(`/api/pelanggan/${pelangganId}`, {
-      method: 'PUT',
-      body: result.data,
-    })
+    await updatePelanggan(result.data as Record<string, unknown>)
     showSnackbar?.('Pelanggan berhasil diupdate!')
-    queryClient.invalidateQueries({ queryKey: ['pelanggan'] })
     navigateTo('/pelanggan')
   }
   catch (err: unknown) {
     const fetchErr = err as { data?: { statusMessage?: string } }
     showSnackbar?.(fetchErr?.data?.statusMessage || 'Gagal mengupdate pelanggan', 'error')
-  }
-  finally {
-    isSubmitting.value = false
   }
 }
 </script>
