@@ -15,6 +15,13 @@ export default defineNuxtConfig({
     autoImports: true,
   },
 
+  ignore: [
+    // ignore all files and folders that start with a dash in the app/pages directory
+    'app/pages/**/-*', 
+    // ignore all files and folders that start with a dash in any subdirectory of the app/pages directory
+    'app/pages/**/-*/**' 
+  ],
+
   imports: {
     dirs: ['types', 'composables/**', 'shared/utils/**'],
   },
