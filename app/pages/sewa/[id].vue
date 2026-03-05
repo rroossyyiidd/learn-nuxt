@@ -191,6 +191,9 @@
 </template>
 
 <script setup lang="ts">
+import { useSewaDetail } from './-composables/useSewaDetail'
+import { useUpdateSewa } from './-composables/useSewaMutations'
+
 useHead({ title: 'Edit Sewa' })
 
 const route = useRoute()
@@ -238,7 +241,7 @@ watch(() => sewaData.value, (data) => {
     form.pelangganName = data.sewa.pelangganName
     form.rentalDate = data.sewa.rentalDate
     form.status = data.sewa.status
-    form.items = data.sewa.items.map((i) => ({ ...i }))
+    form.items = data.sewa.items.map((i: TSewaItem) => ({ ...i }))
 
     // Set selected pelanggan
     const pelanggan = pelangganOptions.value.find((p: TPelanggan) => p.id === data.sewa.pelangganId)

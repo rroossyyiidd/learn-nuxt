@@ -188,6 +188,8 @@
 </template>
 
 <script setup lang="ts">
+import { useAddCatalog } from './-composables/useCatalogMutations'
+
 useHead({ title: 'Add New Film' })
 
 const config = useRuntimeConfig()

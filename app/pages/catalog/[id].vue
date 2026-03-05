@@ -160,6 +160,9 @@
 </template>
 
 <script setup lang="ts">
+import { useCatalogFilm } from './-composables/useCatalogFilm'
+import { useUpdateCatalog } from './-composables/useCatalogMutations'
+
 useHead({ title: 'Edit Film' })
 
 const route = useRoute()

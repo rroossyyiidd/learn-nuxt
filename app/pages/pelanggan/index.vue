@@ -130,7 +130,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDeletePelanggan } from './-hooks/usePelangganMutations'
+import { useDeletePelanggan } from './-composables/usePelangganMutations'
 
 useHead({ title: 'Data Pelanggan' })
 

@@ -84,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAddPelanggan } from './-hooks/usePelangganMutations'
+import { useAddPelanggan } from './-composables/usePelangganMutations'
 
 useHead({ title: 'Tambah Pelanggan' })
 

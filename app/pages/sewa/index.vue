@@ -130,6 +130,10 @@
 </template>
 
 <script setup lang="ts">
+import { useSewa } from './-composables/useSewa'
+import { useDeleteSewa } from './-composables/useSewaMutations'
+import type { TSewa } from './-types/sewa'
+
 useHead({ title: 'Data Sewa' })
 
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')

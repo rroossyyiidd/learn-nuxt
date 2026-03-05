@@ -48,16 +48,10 @@ learn-nuxt-dot/
 │   │   │   ├── useOAuthSession.ts   # OAuth session mutation
 │   │   │   └── useSupabase.ts       # Supabase client singleton
 │   │   ├── catalog/
-│   │   │   ├── useCatalog.ts        # Film list query
-│   │   │   ├── useCatalogFilm.ts    # Single film detail query
-│   │   │   ├── useCatalogMutations.ts # Add, Update, Delete queries
-│   │   │   └── useCatalogStats.ts   # Catalog statistics query
+│   │   │   ├── useCatalog.ts        # Film list query (Shared with sewa)
+│   │   │   └── useCatalogStats.ts   # Catalog statistics query (Shared with dashboard)
 │   │   ├── pelanggan/
 │   │   │   └── usePelanggan.ts      # Customer list query (Shared with sewa)
-│   │   ├── sewa/
-│   │   │   ├── useSewa.ts           # Rental list query
-│   │   │   ├── useSewaDetail.ts
-│   │   │   └── useSewaMutations.ts
 │   │   └── tmdb/
 │   │       ├── useTmdbSearch.ts     # TMDB film search query
 │   │       └── useTmdbGenres.ts     # TMDB genre list query
@@ -71,12 +65,17 @@ learn-nuxt-dot/
 │   │   ├── login.vue              # Login page (Local + OAuth)
 │   │   ├── confirm.vue            # OAuth callback processing page
 │   │   ├── catalog/               # Catalog CRUD views
+│   │   │   ├── -composables/      # Colocated (useCatalogFilm, useCatalogMutations)
+│   │   │   ├── -types/            # Colocated (TFilmResponse)
+│   │   │   └── ...
 │   │   ├── pelanggan/             # Customer CRUD views
-│   │   │   ├── -hooks/            # Colocated hooks (usePelangganDetail, Mutations)
-│   │   │   ├── -types/            # Colocated types (TPelangganDetailResponse)
-│   │   │   ├── index.vue
+│   │   │   ├── -composables/      # Colocated (usePelangganDetail, Mutations)
+│   │   │   ├── -types/            # Colocated (TPelangganDetailResponse)
 │   │   │   └── ...
 │   │   └── sewa/                  # Rental CRUD views
+│   │       ├── -composables/      # Colocated (useSewa, useSewaDetail, Mutations)
+│   │       ├── -types/            # Colocated (TSewa, TSewaResponse, etc.)
+│   │       └── ...
 │   ├── plugins/
 │   │   └── theme.client.ts        # Restores theme preference from localStorage
 │   ├── types/                     # TypeScript type definitions (auto-imported)

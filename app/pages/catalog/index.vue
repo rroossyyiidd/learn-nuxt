@@ -341,6 +341,8 @@
 </template>
 
 <script setup lang="ts">
+import { useDeleteCatalog, useImportCatalogFromTmdb } from './-composables/useCatalogMutations'
+
 useHead({ title: 'Film Catalog' })
 
 const config = useRuntimeConfig()

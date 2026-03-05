@@ -166,6 +166,8 @@
 </template>
 
 <script setup lang="ts">
+import { useAddSewa } from './-composables/useSewaMutations'
+
 useHead({ title: 'Tambah Sewa' })
 
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')

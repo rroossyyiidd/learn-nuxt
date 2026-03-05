@@ -19,10 +19,6 @@ export type TCatalogResponse = {
   total: number
 }
 
-export type TFilmResponse = {
-  film: TFilm
-}
-
 export type TGenreDistribution = {
   genre: string
   count: number

@@ -98,8 +98,8 @@
 </template>
 
 <script setup lang="ts">
-import { usePelangganDetail } from './-hooks/usePelangganDetail'
-import { useUpdatePelanggan } from './-hooks/usePelangganMutations'
+import { usePelangganDetail } from './-composables/usePelangganDetail'
+import { useUpdatePelanggan } from './-composables/usePelangganMutations'
 
 useHead({ title: 'Edit Pelanggan' })
 
