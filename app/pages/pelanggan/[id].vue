@@ -98,6 +98,9 @@
 </template>
 
 <script setup lang="ts">
+import { usePelangganDetail } from './-hooks/usePelangganDetail'
+import { useUpdatePelanggan } from './-hooks/usePelangganMutations'
+
 useHead({ title: 'Edit Pelanggan' })
 
 const route = useRoute()

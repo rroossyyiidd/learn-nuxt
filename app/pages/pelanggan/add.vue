@@ -84,6 +84,8 @@
 </template>
 
 <script setup lang="ts">
+import { useAddPelanggan } from './-hooks/usePelangganMutations'
+
 useHead({ title: 'Tambah Pelanggan' })
 
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')

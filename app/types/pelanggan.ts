@@ -14,7 +14,3 @@ export type TPelangganResponse = {
   pelanggan: TPelanggan[]
   total: number
 }
-
-export type TPelangganDetailResponse = {
-  pelanggan: TPelanggan
-}

@@ -130,6 +130,8 @@
 </template>
 
 <script setup lang="ts">
+import { useDeletePelanggan } from './-hooks/usePelangganMutations'
+
 useHead({ title: 'Data Pelanggan' })
 
 const showSnackbar = inject<(text: string, color?: string) => void>('showSnackbar')
