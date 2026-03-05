@@ -1,22 +1,11 @@
 <template>
   <div>
     <!-- Header -->
-    <div class="d-flex align-center mb-6">
-      <v-btn
-        icon="mdi-arrow-left"
-        variant="text"
-        class="mr-3"
-        to="/catalog"
-      />
-      <div>
-        <h1 class="text-h5 font-weight-bold">
-          Add New Film
-        </h1>
-        <p class="text-body-2 text-medium-emphasis">
-          Add a film to your rental catalog
-        </p>
-      </div>
-    </div>
+    <PageHeader
+      title="Add New Film"
+      subtitle="Add a film to your rental catalog"
+      back-to="/catalog"
+    />
 
     <!-- TMDB Search card -->
     <v-card class="mb-6">
@@ -187,27 +176,11 @@
           </v-row>
 
           <!-- Action buttons -->
-          <v-divider class="my-6" />
-          <div class="d-flex justify-end ga-3 mt-4">
-            <v-btn
-              variant="text"
-              size="large"
-              class="text-none px-8"
-              to="/catalog"
-            >
-              Cancel
-            </v-btn>
-            <v-btn
-              type="submit"
-              color="primary"
-              size="large"
-              class="text-none gradient-btn px-8"
-              :loading="isSubmitting"
-            >
-              <v-icon icon="mdi-content-save" class="mr-2" />
-              Save Film
-            </v-btn>
-          </div>
+          <FormActions
+            cancel-to="/catalog"
+            submit-text="Save Film"
+            :loading="isSubmitting"
+          />
         </v-form>
       </v-card-text>
     </v-card>
@@ -302,8 +275,4 @@ const handleSubmit = async () => {
   border: none;
 }
 
-.gradient-btn {
-  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%) !important;
-  color: white !important;
-}
 </style>

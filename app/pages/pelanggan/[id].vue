@@ -1,39 +1,24 @@
 <template>
   <div>
     <!-- Loading state -->
-    <div v-if="isLoading" class="text-center py-12">
-      <v-progress-circular indeterminate color="primary" size="48" />
-      <p class="text-body-1 mt-4 text-medium-emphasis">
-        Memuat data pelanggan...
-      </p>
-    </div>
+    <LoadingState v-if="isLoading" text="Memuat data pelanggan..." />
 
     <!-- Error state -->
-    <v-alert v-else-if="error" type="error" variant="tonal" class="mb-6">
-      Pelanggan tidak ditemukan. <NuxtLink to="/pelanggan">
-        Kembali ke daftar pelanggan
-      </NuxtLink>
-    </v-alert>
+    <ErrorState
+      v-else-if="error"
+      message="Pelanggan tidak ditemukan."
+      link-text="Kembali ke daftar pelanggan"
+      link-to="/pelanggan"
+    />
 
     <!-- Content -->
     <template v-else-if="pelangganData?.pelanggan">
       <!-- Header -->
-      <div class="d-flex align-center mb-6">
-        <v-btn
-          icon="mdi-arrow-left"
-          variant="text"
-          class="mr-3"
-          to="/pelanggan"
-        />
-        <div>
-          <h1 class="text-h5 font-weight-bold">
-            Edit Pelanggan
-          </h1>
-          <p class="text-body-2 text-medium-emphasis">
-            Ubah data "{{ pelangganData.pelanggan.name }}"
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Edit Pelanggan"
+        :subtitle="`Ubah data &quot;${pelangganData.pelanggan.name}&quot;`"
+        back-to="/pelanggan"
+      />
 
       <!-- Form -->
       <v-card>
@@ -99,28 +84,12 @@
             </v-row>
 
             <!-- Action buttons -->
-            <v-divider class="my-6" />
-            <div class="d-flex justify-end ga-3 mt-4">
-              <v-btn
-                variant="text"
-                size="large"
-                class="text-none px-8"
-                to="/pelanggan"
-              >
-                Batal
-              </v-btn>
-              <v-btn
-                type="submit"
-                color="primary"
-                size="large"
-                class="text-none text-white gradient-btn px-8"
-                style="color: #fff !important"
-                :loading="isSubmitting"
-              >
-                <v-icon icon="mdi-content-save" class="mr-2" />
-                Update Pelanggan
-              </v-btn>
-            </div>
+            <FormActions
+              cancel-to="/pelanggan"
+              cancel-text="Batal"
+              submit-text="Update Pelanggan"
+              :loading="isSubmitting"
+            />
           </v-form>
         </v-card-text>
       </v-card>
@@ -195,8 +164,4 @@ const handleSubmit = async () => {
 }
 </script>
 
-<style scoped>
-.gradient-btn {
-  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%) !important;
-}
-</style>
+

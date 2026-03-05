@@ -1,39 +1,24 @@
 <template>
   <div>
     <!-- Loading state -->
-    <div v-if="isLoading" class="text-center py-12">
-      <v-progress-circular indeterminate color="primary" size="48" />
-      <p class="text-body-1 mt-4 text-medium-emphasis">
-        Loading film data...
-      </p>
-    </div>
+    <LoadingState v-if="isLoading" text="Loading film data..." />
 
     <!-- Error state -->
-    <v-alert v-else-if="error" type="error" variant="tonal" class="mb-6">
-      Film not found. <NuxtLink to="/catalog">
-        Go back to catalog
-      </NuxtLink>
-    </v-alert>
+    <ErrorState
+      v-else-if="error"
+      message="Film not found."
+      link-text="Go back to catalog"
+      link-to="/catalog"
+    />
 
     <!-- Content -->
     <template v-else-if="filmData?.film">
       <!-- Header -->
-      <div class="d-flex align-center mb-6">
-        <v-btn
-          icon="mdi-arrow-left"
-          variant="text"
-          class="mr-3"
-          to="/catalog"
-        />
-        <div>
-          <h1 class="text-h5 font-weight-bold">
-            Edit Film
-          </h1>
-          <p class="text-body-2 text-medium-emphasis">
-            Update "{{ filmData.film.title }}"
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Edit Film"
+        :subtitle="`Update &quot;${filmData.film.title}&quot;`"
+        back-to="/catalog"
+      />
 
       <!-- Form -->
       <v-card>
@@ -162,28 +147,11 @@
             </v-row>
 
             <!-- Action buttons -->
-            <v-divider class="my-6" />
-            <div class="d-flex justify-end ga-3 mt-4">
-              <v-btn
-                variant="text"
-                size="large"
-                class="text-none px-8"
-                to="/catalog"
-              >
-                Cancel
-              </v-btn>
-              <v-btn
-                type="submit"
-                color="primary"
-                size="large"
-                class="text-none text-white gradient-btn px-8"
-                style="color: #fff !important"
-                :loading="isSubmitting"
-              >
-                <v-icon icon="mdi-content-save" class="mr-2" />
-                Update Film
-              </v-btn>
-            </div>
+            <FormActions
+              cancel-to="/catalog"
+              submit-text="Update Film"
+              :loading="isSubmitting"
+            />
           </v-form>
         </v-card-text>
       </v-card>
@@ -281,7 +249,4 @@ const handleSubmit = async () => {
   border: none;
 }
 
-.gradient-btn {
-  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%) !important;
-}
 </style>

@@ -1,15 +1,7 @@
 <template>
   <div>
     <!-- Header -->
-    <div class="d-flex flex-wrap align-center justify-space-between mb-6 ga-3">
-      <div>
-        <h1 class="text-h5 font-weight-bold">
-          Data Pelanggan
-        </h1>
-        <p class="text-body-2 text-medium-emphasis">
-          Kelola data pelanggan rental CD
-        </p>
-      </div>
+    <PageListHeader title="Data Pelanggan" subtitle="Kelola data pelanggan rental CD">
       <v-btn
         color="primary"
         class="text-none gradient-btn"
@@ -18,7 +10,7 @@
         <v-icon icon="mdi-plus" class="mr-2" />
         Tambah Pelanggan
       </v-btn>
-    </div>
+    </PageListHeader>
 
     <!-- Search and filters -->
     <v-card class="mb-6">
@@ -123,33 +115,17 @@
     </v-card>
 
     <!-- Delete confirmation dialog -->
-    <v-dialog v-model="deleteDialog" max-width="400">
-      <v-card>
-        <v-card-title class="text-h6 pa-5">
-          <v-icon icon="mdi-alert-circle" color="error" class="mr-2" />
-          Konfirmasi Hapus
-        </v-card-title>
-        <v-card-text class="px-5">
-          Apakah Anda yakin ingin menghapus pelanggan <strong>{{ pelangganToDelete?.name }}</strong>?
-          Tindakan ini tidak dapat dibatalkan.
-        </v-card-text>
-        <v-card-actions class="pa-5 pt-0">
-          <v-spacer />
-          <v-btn variant="text" class="text-none" @click="deleteDialog = false">
-            Batal
-          </v-btn>
-          <v-btn
-            color="error"
-            variant="flat"
-            class="text-none"
-            :loading="isDeleting"
-            @click="handleDelete"
-          >
-            Hapus
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <ConfirmDialog
+      v-model="deleteDialog"
+      title="Konfirmasi Hapus"
+      :loading="isDeleting"
+      confirm-text="Hapus"
+      cancel-text="Batal"
+      @confirm="handleDelete"
+    >
+      Apakah Anda yakin ingin menghapus pelanggan <strong>{{ pelangganToDelete?.name }}</strong>?
+      Tindakan ini tidak dapat dibatalkan.
+    </ConfirmDialog>
   </div>
 </template>
 

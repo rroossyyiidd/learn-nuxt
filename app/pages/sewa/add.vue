@@ -1,22 +1,11 @@
 <template>
   <div>
     <!-- Header -->
-    <div class="d-flex align-center mb-6">
-      <v-btn
-        icon="mdi-arrow-left"
-        variant="text"
-        class="mr-3"
-        to="/sewa"
-      />
-      <div>
-        <h1 class="text-h5 font-weight-bold">
-          Tambah Data Sewa
-        </h1>
-        <p class="text-body-2 text-medium-emphasis">
-          Buat transaksi penyewaan film baru
-        </p>
-      </div>
-    </div>
+    <PageHeader
+      title="Tambah Data Sewa"
+      subtitle="Buat transaksi penyewaan film baru"
+      back-to="/sewa"
+    />
 
     <!-- Form -->
     <v-card>
@@ -164,27 +153,12 @@
           </v-card>
 
           <!-- Action buttons -->
-          <v-divider class="my-6" />
-          <div class="d-flex justify-end ga-3 mt-4">
-            <v-btn
-              variant="text"
-              size="large"
-              class="text-none px-8"
-              to="/sewa"
-            >
-              Batal
-            </v-btn>
-            <v-btn
-              type="submit"
-              color="primary"
-              size="large"
-              class="text-none gradient-btn px-8"
-              :loading="isSubmitting"
-            >
-              <v-icon icon="mdi-content-save" class="mr-2" />
-              Simpan Sewa
-            </v-btn>
-          </div>
+          <FormActions
+            cancel-to="/sewa"
+            cancel-text="Batal"
+            submit-text="Simpan Sewa"
+            :loading="isSubmitting"
+          />
         </v-form>
       </v-card-text>
     </v-card>
@@ -312,8 +286,4 @@ const handleSubmit = async () => {
 }
 </script>
 
-<style scoped>
-.gradient-btn {
-  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%) !important;
-}
-</style>
+

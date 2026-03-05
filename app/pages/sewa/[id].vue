@@ -1,39 +1,24 @@
 <template>
   <div>
     <!-- Loading state -->
-    <div v-if="isLoading" class="text-center py-12">
-      <v-progress-circular indeterminate color="primary" size="48" />
-      <p class="text-body-1 mt-4 text-medium-emphasis">
-        Memuat data sewa...
-      </p>
-    </div>
+    <LoadingState v-if="isLoading" text="Memuat data sewa..." />
 
     <!-- Error state -->
-    <v-alert v-else-if="error" type="error" variant="tonal" class="mb-6">
-      Data sewa tidak ditemukan. <NuxtLink to="/sewa">
-        Kembali ke daftar sewa
-      </NuxtLink>
-    </v-alert>
+    <ErrorState
+      v-else-if="error"
+      message="Data sewa tidak ditemukan."
+      link-text="Kembali ke daftar sewa"
+      link-to="/sewa"
+    />
 
     <!-- Content -->
     <template v-else-if="sewaData?.sewa">
       <!-- Header -->
-      <div class="d-flex align-center mb-6">
-        <v-btn
-          icon="mdi-arrow-left"
-          variant="text"
-          class="mr-3"
-          to="/sewa"
-        />
-        <div>
-          <h1 class="text-h5 font-weight-bold">
-            Edit Data Sewa
-          </h1>
-          <p class="text-body-2 text-medium-emphasis">
-            Ubah data sewa "{{ sewaData.sewa.pelangganName }}"
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Edit Data Sewa"
+        :subtitle="`Ubah data sewa &quot;${sewaData.sewa.pelangganName}&quot;`"
+        back-to="/sewa"
+      />
 
       <!-- Form -->
       <v-card>
@@ -192,28 +177,12 @@
             </v-card>
 
             <!-- Action buttons -->
-            <v-divider class="my-6" />
-            <div class="d-flex justify-end ga-3 mt-4">
-              <v-btn
-                variant="text"
-                size="large"
-                class="text-none px-8"
-                to="/sewa"
-              >
-                Batal
-              </v-btn>
-              <v-btn
-                type="submit"
-                color="primary"
-                size="large"
-                class="text-none text-white gradient-btn px-8"
-                style="color: #fff !important"
-                :loading="isSubmitting"
-              >
-                <v-icon icon="mdi-content-save" class="mr-2" />
-                Update Sewa
-              </v-btn>
-            </div>
+            <FormActions
+              cancel-to="/sewa"
+              cancel-text="Batal"
+              submit-text="Update Sewa"
+              :loading="isSubmitting"
+            />
           </v-form>
         </v-card-text>
       </v-card>
@@ -360,8 +329,4 @@ const handleSubmit = async () => {
 }
 </script>
 
-<style scoped>
-.gradient-btn {
-  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%) !important;
-}
-</style>
+
