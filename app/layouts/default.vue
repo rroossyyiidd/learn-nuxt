@@ -137,8 +137,8 @@ const snackbarColor = ref('success')
 const menuItems = [
   { title: 'Dashboard', icon: 'mdi-view-dashboard', to: '/' },
   { title: 'Film Catalog', icon: 'mdi-filmstrip-box-multiple', to: '/catalog' },
-  { title: 'Pelanggan', icon: 'mdi-account-group', to: '/pelanggan' },
-  { title: 'Data Sewa', icon: 'mdi-clipboard-text-clock', to: '/sewa' },
+  { title: 'Pelanggan', icon: 'mdi-account-group', to: '/customers' },
+  { title: 'Data Sewa', icon: 'mdi-clipboard-text-clock', to: '/rentals' },
 ]
 
 const pageTitle = computed(() => {
@@ -147,12 +147,12 @@ const pageTitle = computed(() => {
   if (path === '/catalog') return 'Film Catalog'
   if (path === '/catalog/add') return 'Add Film'
   if (path.startsWith('/catalog/')) return 'Edit Film'
-  if (path === '/pelanggan') return 'Data Pelanggan'
-  if (path === '/pelanggan/add') return 'Tambah Pelanggan'
-  if (path.startsWith('/pelanggan/')) return 'Edit Pelanggan'
-  if (path === '/sewa') return 'Data Sewa'
-  if (path === '/sewa/add') return 'Tambah Sewa'
-  if (path.startsWith('/sewa/')) return 'Edit Sewa'
+  if (path === '/customers') return 'Data Pelanggan'
+  if (path === '/customers/add') return 'Tambah Pelanggan'
+  if (path.startsWith('/customers/')) return 'Edit Pelanggan'
+  if (path === '/rentals') return 'Data Sewa'
+  if (path === '/rentals/add') return 'Tambah Sewa'
+  if (path.startsWith('/rentals/')) return 'Edit Sewa'
   return 'CD Rental Admin'
 })
 

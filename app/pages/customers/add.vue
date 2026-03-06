@@ -4,7 +4,7 @@
     <PageHeader
       title="Tambah Pelanggan Baru"
       subtitle="Tambahkan pelanggan baru ke dalam sistem"
-      back-to="/pelanggan"
+      back-to="/customers"
     />
 
     <!-- Form -->
@@ -72,7 +72,7 @@
 
           <!-- Action buttons -->
           <FormActions
-            cancel-to="/pelanggan"
+            cancel-to="/customers"
             cancel-text="Batal"
             submit-text="Simpan Pelanggan"
             :loading="isSubmitting"
@@ -129,7 +129,7 @@ const handleSubmit = async () => {
   try {
     await addPelanggan(result.data as Record<string, unknown>)
     showSnackbar?.('Pelanggan berhasil ditambahkan!')
-    navigateTo('/pelanggan')
+    navigateTo('/customers')
   }
   catch (err: unknown) {
     const fetchErr = err as { data?: { statusMessage?: string } }

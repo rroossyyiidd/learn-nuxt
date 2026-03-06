@@ -8,7 +8,7 @@
       v-else-if="error"
       message="Data sewa tidak ditemukan."
       link-text="Kembali ke daftar sewa"
-      link-to="/sewa"
+      link-to="/rentals"
     />
 
     <!-- Content -->
@@ -17,7 +17,7 @@
       <PageHeader
         title="Edit Data Sewa"
         :subtitle="`Ubah data sewa &quot;${sewaData.sewa.pelangganName}&quot;`"
-        back-to="/sewa"
+        back-to="/rentals"
       />
 
       <!-- Form -->
@@ -178,7 +178,7 @@
 
             <!-- Action buttons -->
             <FormActions
-              cancel-to="/sewa"
+              cancel-to="/rentals"
               cancel-text="Batal"
               submit-text="Update Sewa"
               :loading="isSubmitting"
@@ -325,7 +325,7 @@ const handleSubmit = async () => {
   try {
     await updateSewa(result.data as Record<string, unknown>)
     showSnackbar?.('Data sewa berhasil diupdate!')
-    navigateTo('/sewa')
+    navigateTo('/rentals')
   }
   catch (err: unknown) {
     const fetchErr = err as { data?: { statusMessage?: string } }

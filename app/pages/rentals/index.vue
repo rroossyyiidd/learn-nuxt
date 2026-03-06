@@ -5,7 +5,7 @@
       <v-btn
         color="primary"
         class="text-none gradient-btn"
-        to="/sewa/add"
+        to="/rentals/add"
       >
         <v-icon icon="mdi-plus" class="mr-2" />
         Tambah Sewa
@@ -99,7 +99,7 @@
               variant="text"
               size="small"
               color="info"
-              :to="`/sewa/${item.id}`"
+              :to="`/rentals/${item.id}`"
             />
             <v-btn
               icon="mdi-delete"

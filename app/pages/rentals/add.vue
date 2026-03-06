@@ -4,7 +4,7 @@
     <PageHeader
       title="Tambah Data Sewa"
       subtitle="Buat transaksi penyewaan film baru"
-      back-to="/sewa"
+      back-to="/rentals"
     />
 
     <!-- Form -->
@@ -154,7 +154,7 @@
 
           <!-- Action buttons -->
           <FormActions
-            cancel-to="/sewa"
+            cancel-to="/rentals"
             cancel-text="Batal"
             submit-text="Simpan Sewa"
             :loading="isSubmitting"
@@ -281,7 +281,7 @@ const handleSubmit = async () => {
   try {
     await addSewa(result.data as Record<string, unknown>)
     showSnackbar?.('Data sewa berhasil ditambahkan!')
-    navigateTo('/sewa')
+    navigateTo('/rentals')
   }
   catch (err: unknown) {
     const fetchErr = err as { data?: { statusMessage?: string } }

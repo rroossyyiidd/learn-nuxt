@@ -5,7 +5,7 @@
       <v-btn
         color="primary"
         class="text-none gradient-btn"
-        to="/pelanggan/add"
+        to="/customers/add"
       >
         <v-icon icon="mdi-plus" class="mr-2" />
         Tambah Pelanggan
@@ -100,7 +100,7 @@
               variant="text"
               size="small"
               color="info"
-              :to="`/pelanggan/${item.id}`"
+              :to="`/customers/${item.id}`"
             />
             <v-btn
               icon="mdi-delete"

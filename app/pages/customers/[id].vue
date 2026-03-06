@@ -8,7 +8,7 @@
       v-else-if="error"
       message="Pelanggan tidak ditemukan."
       link-text="Kembali ke daftar pelanggan"
-      link-to="/pelanggan"
+      link-to="/customers"
     />
 
     <!-- Content -->
@@ -17,7 +17,7 @@
       <PageHeader
         title="Edit Pelanggan"
         :subtitle="`Ubah data &quot;${pelangganData.pelanggan.name}&quot;`"
-        back-to="/pelanggan"
+        back-to="/customers"
       />
 
       <!-- Form -->
@@ -85,7 +85,7 @@
 
             <!-- Action buttons -->
             <FormActions
-              cancel-to="/pelanggan"
+              cancel-to="/customers"
               cancel-text="Batal"
               submit-text="Update Pelanggan"
               :loading="isSubmitting"
@@ -160,7 +160,7 @@ const handleSubmit = async () => {
   try {
     await updatePelanggan(result.data as Record<string, unknown>)
     showSnackbar?.('Pelanggan berhasil diupdate!')
-    navigateTo('/pelanggan')
+    navigateTo('/customers')
   }
   catch (err: unknown) {
     const fetchErr = err as { data?: { statusMessage?: string } }
