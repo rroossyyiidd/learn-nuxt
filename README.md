@@ -69,11 +69,11 @@ learn-nuxt-dot/
 │   │   │   ├── -composables/      # Colocated (useCatalogFilm, useCatalogMutations)
 │   │   │   ├── -types/            # Colocated (TFilmResponse)
 │   │   │   └── ...
-│   │   ├── pelanggan/             # Customer CRUD views
+│   │   ├── customers/             # Customer CRUD views
 │   │   │   ├── -composables/      # Colocated (usePelangganDetail, Mutations)
 │   │   │   ├── -types/            # Colocated (TPelangganDetailResponse)
 │   │   │   └── ...
-│   │   └── sewa/                  # Rental CRUD views
+│   │   └── rentals/               # Rental CRUD views
 │   │       ├── -composables/      # Colocated (useSewa, useSewaDetail, Mutations)
 │   │       ├── -types/            # Colocated (TSewa, TSewaResponse, etc.)
 │   │       └── ...
